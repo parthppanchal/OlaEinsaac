@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    android:background="@android:color/holo_blue_dark"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txtview_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="10dp"
+        android:text="LOCATION : "
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/loc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/txtview_location"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="10dp"
+        android:text="kdfk "
+        android:textSize="15sp"
+        android:textStyle="bold"/>
+
+
+    <Button
+        style="@style/styleInfo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="10dp" />
+
+    <TextView
+        android:id="@+id/txtview_eta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtview_location"
+        android:paddingLeft="10dp"
+        android:text="ESTIMATED TIME (IN HOURS):"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/txtview_eta"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="17dp"
+        android:entries="@array/number_arrays"
+        android:layout_centerVertical="true" />
+
+
+</RelativeLayout>
