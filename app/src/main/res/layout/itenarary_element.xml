@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    android:background="@android:color/holo_red_dark">
+
+    <TextView
+        android:id="@+id/i_sno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="DESTINATION #1"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/i_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/i_sno"
+        android:layout_marginTop="10dp"
+        android:text="LOCATION: "
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/i_locationvalue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/i_sno"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/i_location"
+        android:text="Ram Nagr" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/i_location"
+        android:layout_marginTop="10dp"
+        android:text="TIME: "
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/i_timevalue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/i_location"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/i_location"
+        android:text="10am" />
+
+
+</RelativeLayout>

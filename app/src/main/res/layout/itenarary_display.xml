@@ -1,0 +1,105 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:shrinkColumns="*"
+    android:stretchColumns="*">
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="1"
+            android:padding="18dip"
+            android:text="FINAL ITENARARY"
+            android:textSize="20dp"
+            android:textColor="@android:color/holo_red_dark"
+            android:textStyle="bold|italic" />
+
+    </TableRow>
+
+    <!-- Row 1 with single column -->
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="3"
+            android:padding="18dip"
+            android:text="Total fare (Estimated)"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/textview1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="3"
+            android:padding="18dip"
+            android:textSize="18dp" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="3"
+            android:padding="18dip"
+            android:text="Total Distance"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/textview2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="3"
+            android:padding="18dip"
+            android:textSize="18dp" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="3"
+            android:padding="18dip"
+            android:text="Total Time"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/textview3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="3"
+            android:padding="18dip"
+            android:textSize="18dp" />
+
+    </TableRow>
+
+
+
+    <TableRow>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/itenarary_list"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:drawSelectorOnTop="false"
+            android:layout_span="6" />
+    </TableRow>
+</TableLayout>
