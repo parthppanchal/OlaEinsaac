@@ -29,13 +29,15 @@ public class Main2Activity extends AppCompatActivity {
 
     public static final String TAG = Main2Activity.class.getSimpleName();
 
+    ArrayList<HashMap<String, String>> pointsOfInterest = new ArrayList<HashMap<String, String>>();
+    ArrayList<HashMap<String, String>> trips = new ArrayList<HashMap<String, String>>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
         final TextView mTextView = (TextView) findViewById(R.id.abc);
-
 
         // Instantiate the RequestQueue.
         RequestQueue queue = MySingleton.getInstance(this.getApplicationContext()).
@@ -59,9 +61,6 @@ public class Main2Activity extends AppCompatActivity {
         pDialog.setMessage("Loading...");
         pDialog.show();
 
-        final ArrayList<HashMap<String, String>> pointsOfInterest = new ArrayList<HashMap<String, String>>();
-        final HashMap<String, String> pointOfInterest = new HashMap<String, String>();
-
         // Request a string response from the provided URL.
         JsonObjectRequest googleDirectionReq = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -71,87 +70,83 @@ public class Main2Activity extends AppCompatActivity {
                             JSONArray legs = response.getJSONArray("routes").getJSONObject(0).getJSONArray("legs");
                             for (int i = 0; i < legs.length(); i++) {
                                 JSONObject point = legs.getJSONObject(i);
+                                HashMap<String, String> pointOfInterest = new HashMap<String, String>();
                                 pointOfInterest.put("distance", point.getJSONObject("distance").getString("text"));
                                 pointOfInterest.put("duration", point.getJSONObject("duration").getString("text"));
                                 pointOfInterest.put("end_address", point.getString("end_address"));
                                 pointOfInterest.put("end_lat", point.getJSONObject("end_location").getString("lat"));
-                                pointOfInterest.put("end_lon", point.getJSONObject("end_location").getString("lng"));
+                                pointOfInterest.put("end_lng", point.getJSONObject("end_location").getString("lng"));
                                 pointOfInterest.put("start_address", point.getString("start_address"));
                                 pointOfInterest.put("start_lat", point.getJSONObject("start_location").getString("lat"));
-                                pointOfInterest.put("start_lon", point.getJSONObject("start_location").getString("lng"));
-                                pointsOfInterest.add(pointOfInterest);
+                                pointOfInterest.put("start_lng", point.getJSONObject("start_location").getString("lng"));
+                                Main2Activity.this.pointsOfInterest.add(pointOfInterest);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        pDialog.hide();
+                        Main2Activity.this.olaEstReq(pointsOfInterest);
+
                     }
                 }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-                // hide the progress dialog
-                pDialog.hide();
-            }
-        });
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.d(TAG, "Error: " + error.getMessage());
+                        // hide the progress dialog
+                    }
+                });
 
-        final ArrayList<HashMap<String, String>> trips = new ArrayList<HashMap<String, String>>();
-        final HashMap<String, String> trip = new HashMap<String, String>();
+                // Add a request (in this example, called stringRequest) to your RequestQueue.
+                MySingleton.getInstance(this).addToRequestQueue(googleDirectionReq);
 
-        ArrayList<JsonObjectRequest> olaEstReq = new ArrayList<JsonObjectRequest>();
-        for (int i = 0; i < pointsOfInterest.size(); i++) {
-            try {
-                url = "http://sandbox­t.olacabs.com/v1/products?pickup_lat=" +
-                        URLEncoder.encode(pointsOfInterest.get(i).get("start_lat"), "UTF-8") + "&pickup_lng=" +
-                        URLEncoder.encode(pointsOfInterest.get(i).get("start_lng"), "UTF-8") + "&drop_lat=" +
-                        URLEncoder.encode(pointsOfInterest.get(i).get("end_lat"), "UTF-8") + "&drop_lng=" +
-                        URLEncoder.encode(pointsOfInterest.get(i).get("end_lng"), "UTF-8") + "&category=mini";
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            olaEstReq.add(new JsonObjectRequest(Request.Method.GET, url, null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.d(TAG, response.toString());
-                            ArrayList<HashMap<String, String>> trips = new ArrayList<HashMap<String, String>>();
-                            HashMap<String, String> trip = new HashMap<String, String>();
-                            try {
-                                trip.put("eta", response.getJSONArray("ride_estimate").getJSONObject(0).getJSONObject("distance").getString("text"));
-                                JSONObject rideEstimate = response.getJSONArray("ride_estimate").getJSONObject(0);
-                                trip.put("distance", rideEstimate.getString("distance"));
-                                trip.put("travel_time_in_minutes", rideEstimate.getString("travel_time_in_minutes"));
-                                trip.put("amount_min", rideEstimate.getString("amount_min"));
-                                trip.put("amount_max", rideEstimate.getString("amount_max"));
-                                trips.add(trip);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+    }
+
+    public void olaEstReq(ArrayList<HashMap<String, String>> pointsOfInterest) {
+        for (int i = 0; i < Main2Activity.this.pointsOfInterest.size(); i++) {
+            //String url3 = "http://sandbox-t.olacabs.com/v1/products?pickup_lat=12.950072&pickup_lng=77.642684&drop_lat=13.039308&drop_lng=77.599994&category=sedan";
+            String url2 = String.format("http://sandbox­t.olacabs.com/v1/products?pickup_lat=%.03f&pickup_lng=%.03f&drop_lat=%.03f&drop_lng=%.03f&category=mini",
+                    Float.parseFloat(pointsOfInterest.get(i).get("start_lat")),
+                    Float.parseFloat(pointsOfInterest.get(i).get("start_lng")),
+                    Float.parseFloat(pointsOfInterest.get(i).get("end_lat")),
+                    Float.parseFloat(pointsOfInterest.get(i).get("end_lng")));
+            MySingleton.getInstance(Main2Activity.this).addToRequestQueue(
+                    new JsonObjectRequest(
+                            Request.Method.GET,
+                            url2,
+                            null,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    HashMap<String, String> trip = new HashMap<String, String>();
+                                    try {
+                                        trip.put("eta", response.getJSONArray("ride_estimate").getJSONObject(0).getJSONObject("distance").getString("text"));
+                                        JSONObject rideEstimate = response.getJSONArray("ride_estimate").getJSONObject(0);
+                                        trip.put("distance", rideEstimate.getString("distance"));
+                                        trip.put("travel_time_in_minutes", rideEstimate.getString("travel_time_in_minutes"));
+                                        trip.put("amount_min", rideEstimate.getString("amount_min"));
+                                        trip.put("amount_max", rideEstimate.getString("amount_max"));
+                                        Main2Activity.this.trips.add(trip);
+                                        Log.d(TAG, response.toString());
+                                        Log.d(TAG, trips.toString());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e(TAG, "abc");
+                                    VolleyLog.d(TAG, "Error: " + error.getMessage());
+                                }
+                        }) {
+                            @Override
+                            public Map<String, String> getHeaders() throws AuthFailureError {
+                                Map<String, String> headers = new HashMap<String, String>();
+                                headers.put("X-APP-TOKEN", "93c6a2732e2e4988bdff3f4f45a38584");
+                                headers.put("Content-Type", "application/json");
+                                return headers;
                             }
-                            pDialog.hide();
                         }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    VolleyLog.d(TAG, "Error: " + error.getMessage());
-                    // hide the progress dialog
-                    pDialog.hide();
-                }
-            }) {
-
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String, String> headers = new HashMap<String, String>();
-                    headers.put("X-APP-TOKEN", "93c6a2732e2e4988bdff3f4f45a38584");
-                    return headers;
-                }
-            });
-            Log.d(TAG, trips.toString());
-            // Add a request (in this example, called stringRequest) to your RequestQueue.
-
-            MySingleton.getInstance(this).addToRequestQueue(googleDirectionReq);
-            for (i = 0; i < olaEstReq.size(); i++) {
-                MySingleton.getInstance(this).addToRequestQueue(olaEstReq.get(i));
-            }
+                    );
         }
     }
 }
