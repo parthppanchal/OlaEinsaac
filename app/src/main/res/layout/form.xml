@@ -27,7 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_toRightOf="@+id/enterloc" />
+            android:layout_toRightOf="@+id/enterloc"
+            android:hint="Location Name"/>
 
         <Button
             android:id="@+id/form_add"
