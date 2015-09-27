@@ -39,7 +39,7 @@ public class Itenarary extends Activity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        mAdapter = new ItenararyAdapter(Itenarary.this, userDataArrayList);
+        //mAdapter = new ItenararyAdapter(Itenarary.this, userDataArrayList);
         mRecyclerView.setAdapter(mAdapter);
 
         totalfare = (TextView) findViewById(R.id.textview1);

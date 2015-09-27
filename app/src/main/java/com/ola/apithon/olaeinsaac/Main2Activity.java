@@ -3,6 +3,8 @@ package com.ola.apithon.olaeinsaac;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -24,38 +26,69 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 public class Main2Activity extends AppCompatActivity {
+
+    //YK
+    private RecyclerView mRecyclerView;
+    private ItenararyAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private ArrayList<UserData> userDataArrayList = null;
+
+    private TextView totalfare;
+    private TextView totaldistance;
+    private TextView totaltime;
+    //YK
 
     public static final String TAG = Main2Activity.class.getSimpleName();
 
     ArrayList<HashMap<String, String>> pointsOfInterest = new ArrayList<HashMap<String, String>>();
     ArrayList<HashMap<String, String>> trips = new ArrayList<HashMap<String, String>>();
+    ArrayList<JsonObjectRequest> olaEstReqs = new ArrayList<JsonObjectRequest>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-        final TextView mTextView = (TextView) findViewById(R.id.abc);
+
+        yashcode();
 
         // Instantiate the RequestQueue.
         RequestQueue queue = MySingleton.getInstance(this.getApplicationContext()).
                 getRequestQueue();
         String url = null;
+//        try {
+//            url = "https://maps.googleapis.com/maps/api/directions/json?origin=" +
+//                    URLEncoder.encode("Bangalore Palace", "UTF-8") + "&destination=" +
+//                    URLEncoder.encode("Embassy GolfLink", "UTF-8") +
+//                    "&waypoints=optimize:true|" +
+//                    URLEncoder.encode("Cubbon Park", "UTF-8") + "|" +
+//                    URLEncoder.encode("Bull Temple", "UTF-8") + "|" +
+//                    URLEncoder.encode("Lumbini Gardens", "UTF-8") + "|" +
+//                    URLEncoder.encode("UB City, Bangalore", "UTF-8") +
+//                    "&key=AIzaSyCiiu8WHdCas7oWF4p2dg_S0orga33Zt0M";
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+
+        //yk
         try {
             url = "https://maps.googleapis.com/maps/api/directions/json?origin=" +
-                    URLEncoder.encode("Bangalore Palace", "UTF-8") + "&destination=" +
-                    URLEncoder.encode("Embassy GolfLink", "UTF-8") +
-                    "&waypoints=optimize:true|" +
-                    URLEncoder.encode("Cubbon Park", "UTF-8") + "|" +
-                    URLEncoder.encode("Bull Temple", "UTF-8") + "|" +
-                    URLEncoder.encode("Lumbini Gardens", "UTF-8") + "|" +
-                    URLEncoder.encode("UB City, Bangalore", "UTF-8") +
-                    "&key=AIzaSyCiiu8WHdCas7oWF4p2dg_S0orga33Zt0M";
+                    URLEncoder.encode(userDataArrayList.get(0).location, "UTF-8") + "&destination=" +
+                    URLEncoder.encode(userDataArrayList.get(userDataArrayList.size()-1).location, "UTF-8") +
+                    "&waypoints=optimize:true";
+
+            for(int i = 1; i < userDataArrayList.size() - 1; i++) {
+                url = url + "|" + URLEncoder.encode(userDataArrayList.get(i).location, "UTF-8");
+            }
+            url += "&key=AIzaSyCiiu8WHdCas7oWF4p2dg_S0orga33Zt0M";
+            Log.d("url",url);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        //ykk
 
         final ProgressDialog pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
@@ -71,8 +104,8 @@ public class Main2Activity extends AppCompatActivity {
                             for (int i = 0; i < legs.length(); i++) {
                                 JSONObject point = legs.getJSONObject(i);
                                 HashMap<String, String> pointOfInterest = new HashMap<String, String>();
-                                pointOfInterest.put("distance", point.getJSONObject("distance").getString("text"));
-                                pointOfInterest.put("duration", point.getJSONObject("duration").getString("text"));
+                                pointOfInterest.put("distance", point.getJSONObject("distance").getString("value"));
+                                pointOfInterest.put("duration", point.getJSONObject("duration").getString("value"));
                                 pointOfInterest.put("end_address", point.getString("end_address"));
                                 pointOfInterest.put("end_lat", point.getJSONObject("end_location").getString("lat"));
                                 pointOfInterest.put("end_lng", point.getJSONObject("end_location").getString("lng"));
@@ -80,11 +113,35 @@ public class Main2Activity extends AppCompatActivity {
                                 pointOfInterest.put("start_lat", point.getJSONObject("start_location").getString("lat"));
                                 pointOfInterest.put("start_lng", point.getJSONObject("start_location").getString("lng"));
                                 Main2Activity.this.pointsOfInterest.add(pointOfInterest);
+                                Log.d("map",Main2Activity.this.pointsOfInterest.toString());
+                                double dis=0;
+                                double time=0;
+
+//                                Log.d("map",)
+                                for (int j=0;j<pointsOfInterest.size();j++) {
+                                    dis+=Double.parseDouble(pointsOfInterest.get(j).get("distance"))/1000;
+                                    Log.d("map",pointsOfInterest.get(j).get("distance"));
+                                }
+
+                                for (int j=0;j<pointsOfInterest.size();j++) {
+                                    time+=Double.parseDouble(pointsOfInterest.get(j).get("duration"))/60;
+                                    Log.d("map",pointsOfInterest.get(j).get("duration"));
+                                }
+
+                                totaldistance.setText(dis + "");
+
+                                totaltime.setText(time + "");
+
+                                totalfare.setText(calculatefare(dis, time) + " ");
+                                mAdapter = new ItenararyAdapter(Main2Activity.this, Main2Activity.this.pointsOfInterest,userDataArrayList);
+                                mRecyclerView.setAdapter(mAdapter);
+
+                                pDialog.dismiss();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Main2Activity.this.olaEstReq(pointsOfInterest);
+//                        Main2Activity.this.olaEstReq(pointsOfInterest);
 
                     }
                 }, new Response.ErrorListener() {
@@ -97,8 +154,54 @@ public class Main2Activity extends AppCompatActivity {
 
                 // Add a request (in this example, called stringRequest) to your RequestQueue.
                 MySingleton.getInstance(this).addToRequestQueue(googleDirectionReq);
+//                for(int i = 0; i < pointsOfInterest.size(); i++) {
+//                    MySingleton.getInstance(Main2Activity.this).addToRequestQueue(olaEstReqs.get(i));
+//                }
+    }
+
+    public void yashcode(){
+        userDataArrayList = (ArrayList<UserData>) getIntent().getSerializableExtra("ArrayList");
+
+        setContentView(R.layout.itenarary_display);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.itenarary_list);
+
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+
+
+        totalfare = (TextView) findViewById(R.id.textview1);
+        totaldistance = (TextView) findViewById(R.id.textview2);
+        totaltime = (TextView) findViewById(R.id.textview3);
+
+//        double dis=0;
+//        double time=0;
+//
+//        Log.d("map",)
+//        for (int i=0;i<pointsOfInterest.size();i++) {
+//            dis+=Double.parseDouble(pointsOfInterest.get(i).get("distance"));
+//        }
+//
+//        for (int i=0;i<pointsOfInterest.size();i++) {
+//            time+=Double.parseDouble(pointsOfInterest.get(i).get("duration"));
+//        }
+//
+//        totaldistance.setText(dis+"");
+//
+//        totaltime.setText(time+"");
+//
+//        totalfare.setText(calculatefare(dis,time)+" ");
+
 
     }
+
+    public double calculatefare(double distance, double dur){
+        return 80+10*(distance-4)+dur;
+    }
+
+
 
     public void olaEstReq(ArrayList<HashMap<String, String>> pointsOfInterest) {
         for (int i = 0; i < Main2Activity.this.pointsOfInterest.size(); i++) {
@@ -108,8 +211,7 @@ public class Main2Activity extends AppCompatActivity {
                     Float.parseFloat(pointsOfInterest.get(i).get("start_lng")),
                     Float.parseFloat(pointsOfInterest.get(i).get("end_lat")),
                     Float.parseFloat(pointsOfInterest.get(i).get("end_lng")));
-            MySingleton.getInstance(Main2Activity.this).addToRequestQueue(
-                    new JsonObjectRequest(
+            olaEstReqs.add(new JsonObjectRequest(
                             Request.Method.GET,
                             url2,
                             null,
@@ -127,6 +229,8 @@ public class Main2Activity extends AppCompatActivity {
                                         Main2Activity.this.trips.add(trip);
                                         Log.d(TAG, response.toString());
                                         Log.d(TAG, trips.toString());
+
+
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }

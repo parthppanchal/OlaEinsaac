@@ -36,6 +36,7 @@
         android:text="Ram Nagr" />
 
     <TextView
+        android:id="@+id/:i_time1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -52,6 +53,15 @@
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/i_location"
         android:text="10am" />
+
+    <TextView
+        android:id="@+id/i_time2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/i_timevalue"
+        android:layout_marginLeft="70dp"
+   android:text="TIME: "
+        android:textStyle="bold" />
 
 
 </RelativeLayout>

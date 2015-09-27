@@ -48,7 +48,8 @@ public class RecyclerViewManager extends Activity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(this, Itenarary.class);
+//        Intent intent = new Intent(this, Itenarary.class);
+        Intent intent = new Intent(this, Main2Activity.class);
         //Bundle bundle =new Bundle();
         //bundle.putSerializable("ArrayList",(Serializable) userDataArrayList);
         intent.putExtra("ArrayList",userDataArrayList);

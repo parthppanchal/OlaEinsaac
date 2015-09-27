@@ -85,6 +85,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView loc;
         TextView time;
         TextView dest;
+
+        TextView time2;
         Button cross;
 
         public MyViewHolder(View itemView) {
@@ -93,6 +95,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             time = (TextView) itemView.findViewById(R.id.rv_time);
             cross = (Button) itemView.findViewById(R.id.rv_cross);
             dest = (TextView) itemView.findViewById(R.id.rv_dest);
+            time2 = (TextView) itemView.findViewById(R.id.i_time2);
 
         }
 
