@@ -30,9 +30,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.form);
 
         userDataArrayList = new ArrayList<>();
-        temp = new UserData();
-        x = 1
-        ;
+        x = 1;
 
         form_add = (Button) findViewById(R.id.form_add);
         form_next = (Button) findViewById(R.id.form_next);
@@ -46,6 +44,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.form_add) {
+            temp= new UserData();
             if (form_loc !=null)
                 temp.location = form_loc.getText().toString();
             else

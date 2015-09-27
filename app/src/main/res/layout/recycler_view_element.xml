@@ -10,6 +10,30 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/txtview_dno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="10dp"
+        android:text="DESTINATION : "
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/rv_dest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/txtview_dno"
+        android:paddingLeft="10dp"
+        android:text="slkdj"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+
+    <TextView
         android:id="@+id/txtview_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
