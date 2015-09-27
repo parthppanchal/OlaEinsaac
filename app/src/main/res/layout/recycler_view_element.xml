@@ -23,19 +23,20 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/loc"
+        android:id="@+id/rv_loc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/txtview_location"
         android:layout_centerInParent="true"
         android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/txtview_location"
         android:paddingLeft="10dp"
         android:text="kdfk "
         android:textSize="15sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
 
     <Button
+        android:id="@+id/rv_cross"
         style="@style/styleInfo"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -49,20 +50,21 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtview_location"
         android:paddingLeft="10dp"
-        android:text="ESTIMATED TIME (IN HOURS):"
+        android:text="ESTIMATED TIME (IN HOURS): "
         android:textColor="@android:color/white"
         android:textSize="15sp"
         android:textStyle="bold" />
 
-    <Spinner
-        android:id="@+id/_spinner"
+    <TextView
+        android:id="@+id/rv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/txtview_location"
+        android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/txtview_eta"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="17dp"
-        android:entries="@array/number_arrays"
-        android:layout_centerVertical="true" />
+        android:text="dkfjlksdjf"
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
 
 </RelativeLayout>
